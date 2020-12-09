@@ -1,0 +1,2 @@
+
+Route::multiauth('{{Name}}', '{{name}}');

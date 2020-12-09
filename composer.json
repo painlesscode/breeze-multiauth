@@ -1,0 +1,34 @@
+{
+    "name": "painlesscode/breeze-multiauth",
+    "description": "Multi authentication system with laravel breeze",
+    "keywords": ["laravel", "auth", "breeze", "multiauth"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hazzaz Bin Faiz",
+            "email": "hazzazbinfaiz@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php" : "^7.3|^8.0",
+        "illuminate/filesystem": "^8.0",
+        "illuminate/support": "^8.0",
+        "nikic/php-parser": "^4.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Painless\\BreezeMultiAuth\\" : "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Painless\\BreezeMultiAuth\\BreezeMultiAuthServiceProvider"
+            ]
+        }
+    }
+}
