@@ -77,12 +77,17 @@ class InstallCommand extends Command
         $this->copyDirectory(__DIR__.'/../../stubs/tests/Feature', base_path('tests/Feature'), Str::studly($this->name));
 
         // Routes...
-        (new Filesystem())->append(
-            base_path('routes/web.php'),
-            $this->compile(
-                (new Filesystem)->get(__DIR__.'/../../stubs/routes/web.php')
-            )
-        );
+        if(!str_contains(
+            (new Filesystem)->get(base_path('routes/web.php')),
+            trim((new Filesystem)->get(base_path(__DIR__.'/../../stubs/routes/web.php')))
+        )){
+            (new Filesystem())->append(
+                base_path('routes/web.php'),
+                $this->compile(
+                    (new Filesystem)->get(__DIR__.'/../../stubs/routes/web.php')
+                )
+            );
+        }
 
         //Database
         $this->putCompiledFile(__DIR__.'/../../stubs/App/Models/User.php', app_path('Models'.DIRECTORY_SEPARATOR.Str::Studly($this->name).'.php'));
@@ -90,10 +95,10 @@ class InstallCommand extends Command
         $this->putCompiledFile(__DIR__.'/../../stubs/database/migrations/2014_10_12_000000_create_users_table.php', database_path('migrations'.DIRECTORY_SEPARATOR.date('Y_m_d').'_000000_create_'.Str::plural($this->name).'_table.php'));
 
 
-        (new AuthConfigEditor($this->name))->edit();
-        (new AuthenticateMiddlewareEditor($this->name))->edit();
-        (new RedirectIfAuthMiddlewareEditor($this->name))->edit();
-
+        if((new AuthConfigEditor($this->name))->edit()) {
+            (new AuthenticateMiddlewareEditor($this->name))->edit();
+            (new RedirectIfAuthMiddlewareEditor($this->name))->edit();
+        }
 
         if($this->option('asset')){
             // Tailwind / Webpack...
