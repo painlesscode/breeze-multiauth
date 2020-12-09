@@ -16,7 +16,9 @@ jobs:
         run: composer create-project --prefer-dist laravel/laravel:^8.0 laravel
         
       - name: Move everything to current directory
-        run: mv laravel/* ./
+        run: |
+          mv laravel/* ./
+          ls -all
         
       - name: Ensure Directory exists
         run: mkdir -p packages/painlesscode/breeze-multiauth
@@ -27,6 +29,9 @@ jobs:
           
       - name: Link composer with package
         run: composer config repositories.breeze-multiauth path packages/painlesscode/breeze-multiauth
+        
+      - name: Copy env file
+        run : php -r "file_exists('.env') || copy('.env.example', '.env');"
         
       - name: Generate Key
         run: php artisan key:generate
