@@ -20,7 +20,7 @@ class {{Name}}EmailVerificationTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->actingAs(${{name}}, '{{name}}')->get('/verify-email');
+        $response = $this->actingAs(${{name}}, '{{name}}')->get('{{name}}/verify-email');
 
         $response->assertStatus(200);
     }
@@ -53,7 +53,7 @@ class {{Name}}EmailVerificationTest extends TestCase
         ]);
 
         $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
+            '{{name}}.verification.verify',
             now()->addMinutes(60),
             ['id' => ${{name}}->id, 'hash' => sha1('wrong-email')]
         );
