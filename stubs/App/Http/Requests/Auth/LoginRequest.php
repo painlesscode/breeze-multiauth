@@ -69,7 +69,7 @@ class LoginRequest extends FormRequest
             return;
         }
 
-        //event(new Lockout($this));
+        event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
