@@ -11,6 +11,7 @@ class MultiAuthRouteMethods
 
             $this->middleware(['auth:'.$guard])->name($guard.'.')->prefix($guard)->group(function() use ($options, $namespace) {
 
+                $this->get('/', ["App\Http\Controllers\\$namespace\DashboardController", 'index']);
                 $this->get('/dashboard', ["App\Http\Controllers\\$namespace\DashboardController", 'index'])->name('dashboard');
 
                 if ($options['verify'] ?? true) {
