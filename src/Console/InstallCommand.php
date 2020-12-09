@@ -79,7 +79,7 @@ class InstallCommand extends Command
         // Routes...
         if(!str_contains(
             (new Filesystem)->get(base_path('routes/web.php')),
-            trim((new Filesystem)->get(base_path(__DIR__.'/../../stubs/routes/web.php')))
+            trim((new Filesystem)->get(__DIR__.'/../../stubs/routes/web.php'))
         )){
             (new Filesystem())->append(
                 base_path('routes/web.php'),
