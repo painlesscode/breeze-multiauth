@@ -13,10 +13,11 @@ jobs:
 
     steps:
       - name: Create Laravel 8 project
-        run: |
-          composer create-project --prefer-dist laravel/laravel:^8.0 laravel
-          mv laravel/* ./
-          
+        run: composer create-project --prefer-dist laravel/laravel:^8.0 laravel
+        
+      - name: Move everything to current directory
+        run: mv laravel/* ./
+        
       - name: Ensure Directory exists
         run: mkdir -p packages/painlesscode/breeze-multiauth
         
@@ -27,20 +28,28 @@ jobs:
       - name: Link composer with package
         run: composer config repositories.breeze-multiauth path packages/painlesscode/breeze-multiauth
         
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-        
-      - name: Generate key
-        run: php artisan key:generate
-        
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
         
+      - name: Create Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+        
       - name: Require Breeze Multiauth
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: composer require painlesscode/breeze-multiauth:*
         
       - name: Install Breeze Multiauth
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: php artisan breeze:multiauth admin --asset
         
       - name: Execute tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: php artisan test
