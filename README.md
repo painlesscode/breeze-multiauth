@@ -1,5 +1,7 @@
 # Breeze Multiauth
 
+[![Laravel](https://github.com/painlesscode/breeze-multiauth/workflows/Laravel/badge.svg)](https://github.com/painlesscode/breeze-multiauth/actions?query=workflow%3ALaravel)
+
 laravel breeze with multi authentication system.
 
 If you want to create standalone authentication system like default laravel user authentication system but using different guard, this package will help you.
