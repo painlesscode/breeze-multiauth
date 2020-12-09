@@ -1,7 +1,8 @@
 The MIT License (MIT)
 
 Copyright (c) Md. Hazzaz Bin Faiz
-This package uses files from laravel/breeze, Copyright (c) Taylor Otwell
+
+This package uses some files from laravel/breeze package, Copyright (c) Taylor Otwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
