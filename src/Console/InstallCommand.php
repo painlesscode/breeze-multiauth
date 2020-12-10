@@ -19,7 +19,8 @@ class InstallCommand extends Command
      */
     protected $signature = 'breeze:multiauth
                             { name : Name of user role }
-                            {--asset : Install Breeze with assets }';
+                            {--asset : Install Breeze with assets }
+                            {--force : Force replace existing file }';
 
     /**
      * The console command description.
@@ -183,7 +184,11 @@ class InstallCommand extends Command
     protected function putCompiledFile($source, $destination)
     {
         $filesystem = new Filesystem;
-
+        if($filesystem->exists($destination) && ! $this->option('force')){
+            if (! $this->confirm("The [{$destination}] file already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
         $filesystem->put($destination, $this->compile($filesystem->get($source)));
     }
 
