@@ -4,6 +4,7 @@ namespace Painless\BreezeMultiAuth\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Painless\BreezeMultiAuth\Editors\AuthConfigEditor;
 use Painless\BreezeMultiAuth\Editors\AuthenticateMiddlewareEditor;
@@ -78,10 +79,7 @@ class InstallCommand extends Command
         $this->copyDirectory(__DIR__.'/../../stubs/tests/Feature', base_path('tests/Feature'), Str::studly($this->name));
 
         // Routes...
-        if(!str_contains(
-            (new Filesystem)->get(base_path('routes/web.php')),
-            trim((new Filesystem)->get(__DIR__.'/../../stubs/routes/web.php'))
-        )){
+        if(!Route::has($this->name.'.')){
             (new Filesystem())->append(
                 base_path('routes/web.php'),
                 $this->compile(
