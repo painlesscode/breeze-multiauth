@@ -9,7 +9,7 @@ If you want to create standalone authentication system like default laravel user
 ## Installation
 You can install the package via composer:
 ``` bash
-composer require painlesscode/breeze-multiauth
+composer require painlesscode/breeze-multiauth --dev
 ```
  
 ## Usage
