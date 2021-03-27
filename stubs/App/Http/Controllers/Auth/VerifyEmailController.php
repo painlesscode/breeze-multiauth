@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\{{Name}}\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Requests\{{Name}}\Auth\EmailVerificationRequest;
 
 class VerifyEmailController extends Controller
 {
