@@ -4,7 +4,6 @@ namespace App\Http\Controllers\{{Name}}\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\{{Name}};
-use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Request;

@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Painless\BreezeMultiAuth\Editors\AuthConfigEditor;
 use Painless\BreezeMultiAuth\Editors\AuthenticateMiddlewareEditor;
 use Painless\BreezeMultiAuth\Editors\RedirectIfAuthMiddlewareEditor;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -38,6 +39,7 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->name = Str::snake($this->argument('name'));
+
         if($this->option('asset')){
             // NPM Packages...
             $this->updateNodePackages(function ($packages) {
@@ -54,43 +56,43 @@ class InstallCommand extends Command
 
         // Controllers...
         (new Filesystem)->ensureDirectoryExists(app_path('Http/Controllers/'.Str::studly($this->name).'/Auth'));
-        $this->copyDirectory(__DIR__.'/../../stubs/App/Http/Controllers/Auth', app_path('Http/Controllers/'.Str::studly($this->name).'/Auth'));
-        $this->putCompiledFile(__DIR__.'/../../stubs/App/Http/Controllers/DashboardController.php', app_path('Http/Controllers/'.Str::studly($this->name).'/DashboardController.php'));
+        $this->copyDirectory(__DIR__ . '/../../stubs/default/App/Http/Controllers/Auth', app_path('Http/Controllers/'.Str::studly($this->name).'/Auth'));
+        $this->putCompiledFile(__DIR__ . '/../../stubs/default/App/Http/Controllers/DashboardController.php', app_path('Http/Controllers/'.Str::studly($this->name).'/DashboardController.php'));
 
 
         // Requests...
         (new Filesystem)->ensureDirectoryExists(app_path('Http/Requests/'.Str::studly($this->name).'/Auth'));
-        $this->copyDirectory(__DIR__.'/../../stubs/App/Http/Requests/Auth', app_path('Http/Requests/'.Str::studly($this->name).'/Auth'));
+        $this->copyDirectory(__DIR__ . '/../../stubs/default/App/Http/Requests/Auth', app_path('Http/Requests/'.Str::studly($this->name).'/Auth'));
 
         // Views...
         (new Filesystem)->ensureDirectoryExists(resource_path('views/'.$this->name.'/auth'));
         (new Filesystem)->ensureDirectoryExists(resource_path('views/'.$this->name.'/layouts'));
 
-        $this->copyDirectory(__DIR__.'/../../stubs/resources/views/auth', resource_path('views/'.$this->name.'/auth'));
-        $this->copyDirectory(__DIR__.'/../../stubs/resources/views/layouts', resource_path('views/'.$this->name.'/layouts'));
+        $this->copyDirectory(__DIR__ . '/../../stubs/default/resources/views/auth', resource_path('views/'.$this->name.'/auth'));
+        $this->copyDirectory(__DIR__ . '/../../stubs/default/resources/views/layouts', resource_path('views/'.$this->name.'/layouts'));
 
         if(!(new Filesystem)->exists(resource_path('views/components/button.blade.php'))){
             (new Filesystem)->ensureDirectoryExists(resource_path('views/components'));
-            (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/resources/views/components', resource_path('views/components'));
+            (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/default/resources/views/components', resource_path('views/components'));
         }
 
-        $this->putCompiledFile(__DIR__.'/../../stubs/resources/views/dashboard.blade.php', resource_path('views/'.$this->name.'/dashboard.blade.php'));
+        $this->putCompiledFile(__DIR__ . '/../../stubs/default/resources/views/dashboard.blade.php', resource_path('views/'.$this->name.'/dashboard.blade.php'));
 
         // Tests...
-        $this->copyDirectory(__DIR__.'/../../stubs/tests/Feature', base_path('tests/Feature'), Str::studly($this->name));
+        $this->copyDirectory(__DIR__ . '/../../stubs/default/tests/Feature', base_path('tests/Feature'), Str::studly($this->name));
 
         // Routes...
         if(!Route::has($this->name.'.')){
             (new Filesystem())->append(
                 base_path('routes/web.php'),
                 $this->compile(
-                    (new Filesystem)->get(__DIR__.'/../../stubs/routes/web.php')
+                    (new Filesystem)->get(__DIR__ . '/../../stubs/default/routes/web.php')
                 )
             );
         }
 
         //Database
-        $this->putCompiledFile(__DIR__.'/../../stubs/App/Models/User.php', app_path('Models'.DIRECTORY_SEPARATOR.Str::Studly($this->name).'.php'));
+        $this->putCompiledFile(__DIR__ . '/../../stubs/default/App/Models/User.php', app_path('Models'.DIRECTORY_SEPARATOR.Str::Studly($this->name).'.php'));
         $this->putCompiledFile(__DIR__.'/../../stubs/database/factories/UserFactory.php', database_path('factories'.DIRECTORY_SEPARATOR.Str::Studly($this->name).'Factory.php'));
         $this->putCompiledFile(__DIR__.'/../../stubs/database/migrations/2014_10_12_000000_create_users_table.php', database_path('migrations'.DIRECTORY_SEPARATOR.date('Y_m_d').'_000000_create_'.Str::plural($this->name).'_table.php'));
 
@@ -102,10 +104,10 @@ class InstallCommand extends Command
 
         if($this->option('asset')){
             // Tailwind / Webpack...
-            copy(__DIR__.'/../../stubs/tailwind.config.js', base_path('tailwind.config.js'));
-            copy(__DIR__.'/../../stubs/webpack.mix.js', base_path('webpack.mix.js'));
-            copy(__DIR__.'/../../stubs/resources/css/app.css', resource_path('css/app.css'));
-            copy(__DIR__.'/../../stubs/resources/js/app.js', resource_path('js/app.js'));
+            copy(__DIR__.'/../../stubs/default/tailwind.config.js', base_path('tailwind.config.js'));
+            copy(__DIR__.'/../../stubs/default/webpack.mix.js', base_path('webpack.mix.js'));
+            copy(__DIR__ . '/../../stubs/default/resources/css/app.css', resource_path('css/app.css'));
+            copy(__DIR__ . '/../../stubs/default/resources/js/app.js', resource_path('js/app.js'));
         }
 
         $this->info('Breeze scaffolding installed successfully.');
@@ -200,5 +202,31 @@ class InstallCommand extends Command
             '{{Names}}' => Str::pluralStudly($this->name)
         ];
         return str_replace(array_keys($replacements), array_values($replacements), $input);
+    }
+
+    /**
+     * Installs the given Composer Packages into the application.
+     *
+     * @param  mixed  $packages
+     * @return void
+     */
+    protected function requireComposerPackages($packages)
+    {
+        $composer = $this->option('composer');
+
+        if ($composer !== 'global') {
+            $command = ['php', $composer, 'require'];
+        }
+
+        $command = array_merge(
+            $command ?? ['composer', 'require'],
+            is_array($packages) ? $packages : func_get_args()
+        );
+
+        (new Process($command, base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
+            ->setTimeout(null)
+            ->run(function ($type, $output) {
+                $this->output->write($output);
+            });
     }
 }

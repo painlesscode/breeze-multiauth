@@ -4,7 +4,7 @@ namespace App\Http\Controllers\{{Name}}\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
-use App\Http\Requests\{{Name}}\Auth\EmailVerificationRequest;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class VerifyEmailController extends Controller
 {

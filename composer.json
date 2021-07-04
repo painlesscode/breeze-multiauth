@@ -12,8 +12,9 @@
     "minimum-stability": "dev",
     "require": {
         "php" : "^7.3|^8.0",
-        "illuminate/filesystem": "^8.0",
-        "illuminate/support": "^8.0",
+        "illuminate/filesystem": "^8.42",
+        "illuminate/support": "^8.42",
+        "illuminate/validation": "^8.42",
         "nikic/php-parser": "^4.6"
     },
     "autoload": {
