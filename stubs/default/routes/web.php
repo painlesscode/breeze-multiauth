@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{{Name}}\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\{{Name}}\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\{{Name}}\Auth\DashboardController;
 use App\Http\Controllers\{{Name}}\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\{{Name}}\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\{{Name}}\Auth\NewPasswordController;
@@ -11,6 +12,14 @@ use App\Http\Controllers\{{Name}}\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('{{name}}')->name('{{name}}.')->group(function () {
+
+    Route::get('/', [DashboardController::class, 'index'])
+        ->middleware('auth:{{name}}');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware('auth:{{name}}')
+        ->name('dashboard');
+
     Route::get('/register', [RegisteredUserController::class, 'create'])
         ->middleware('guest:{{name}}')
         ->name('register');
