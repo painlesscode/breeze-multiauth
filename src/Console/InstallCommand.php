@@ -83,13 +83,14 @@ class InstallCommand extends Command
 
         // Routes...
         if(!Route::has($this->name.'.')){
+            $this->putCompiledFile(__DIR__ . '/../../stubs/default/routes/web.php', base_path('routes/'.$this->name.'.php'));
             (new Filesystem())->append(
                 base_path('routes/web.php'),
-                $this->compile(
-                    (new Filesystem)->get(__DIR__ . '/../../stubs/default/routes/web.php')
-                )
+                $this->compile("require __DIR__.'/".$this->name.".php';")
             );
         }
+
+
 
         //Database
         $this->putCompiledFile(__DIR__ . '/../../stubs/default/App/Models/User.php', app_path('Models'.DIRECTORY_SEPARATOR.Str::Studly($this->name).'.php'));
