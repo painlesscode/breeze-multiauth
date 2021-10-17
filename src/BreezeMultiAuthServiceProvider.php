@@ -25,14 +25,11 @@ class BreezeMultiAuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::mixin(new MultiAuthRouteMethods());
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\InstallCommand::class,
             ]);
         }
-
     }
 
     /**
