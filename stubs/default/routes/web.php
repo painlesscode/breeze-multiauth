@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\{{Name}}\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\{{Name}}\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\{{Name}}\Auth\DashboardController;
 use App\Http\Controllers\{{Name}}\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\{{Name}}\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\{{Name}}\Auth\NewPasswordController;
 use App\Http\Controllers\{{Name}}\Auth\PasswordResetLinkController;
 use App\Http\Controllers\{{Name}}\Auth\RegisteredUserController;
 use App\Http\Controllers\{{Name}}\Auth\VerifyEmailController;
+use App\Http\Controllers\{{Name}}\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('{{name}}')->name('{{name}}.')->group(function () {
