@@ -37,7 +37,7 @@ jobs:
         run: |
           composer require painlesscode/breeze-multiauth:*
           php artisan breeze:multiauth admin --asset
-          composer install -o --no-dev
+          composer remove painlesscode/breeze-multiauth
 
       - name: Execute tests
         env:
