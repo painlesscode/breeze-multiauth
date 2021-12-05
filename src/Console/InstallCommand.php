@@ -78,6 +78,11 @@ class InstallCommand extends Command
 
         $this->putCompiledFile(__DIR__ . '/../../stubs/default/resources/views/dashboard.blade.php', resource_path('views/'.$this->name.'/dashboard.blade.php'));
 
+        // Components...
+        (new Filesystem)->ensureDirectoryExists(app_path('View/Components'));
+        $this->putCompiledFile(__DIR__ . '/../../stubs/default/App/View/Components/AppLayout.php', app_path('View/Components/'.Str::Studly($this->name).'AppLayout.php'));
+        $this->putCompiledFile(__DIR__ . '/../../stubs/default/App/View/Components/GuestLayout.php', app_path('View/Components/'.Str::Studly($this->name).'GuestLayout.php'));
+
         // Tests...
         $this->copyDirectory(__DIR__ . '/../../stubs/default/tests/Feature', base_path('tests/Feature'), Str::studly($this->name));
 

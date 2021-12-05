@@ -1,6 +1,4 @@
-@extends('{{name}}.layouts.guest')
-
-@section('content')
+<x-{{name}}-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -38,4 +36,4 @@
             </form>
         </div>
     </x-auth-card>
-@endsection
+</x-{{name}}-guest-layout>
