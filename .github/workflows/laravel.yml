@@ -10,7 +10,6 @@ jobs:
   laravel-tests:
     
     strategy:
-      fail-fast: true
       matrix:
         laravel: ['8.6', '9.0']
 
