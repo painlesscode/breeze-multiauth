@@ -8,12 +8,17 @@ on:
 
 jobs:
   laravel-tests:
+    
+    strategy:
+      fail-fast: true
+      matrix:
+        laravel: ['8.42', '9.0']
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Laravel 8 project
-        run: composer create-project --prefer-dist laravel/laravel:^8.0 ./
+      - name: Create Laravel ${{ matrix.laravel }} project
+        run: composer create-project --prefer-dist laravel/laravel:^${{ matrix.laravel }} ./
 
       - name: Ensure Directory exists
         run: mkdir -p packages/painlesscode/breeze-multiauth
